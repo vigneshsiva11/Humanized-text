@@ -51,7 +51,7 @@ cd backend
 node server.js
 ```
 
-The backend starts on `http://localhost:3000` by default.
+The backend starts on `http://localhost:3000` by default during local development.
 
 ### 4. Load the Chrome extension
 
@@ -109,5 +109,5 @@ Response:
 
 ## Notes
 
-- The backend is currently configured for local development using `http://localhost:3000`.
-- If you deploy the backend, update the API URL in the extension to match the hosted endpoint.
+- For local development, the extension can use `http://localhost:3000`.
+- For production or Render deployments, update the API URL in the extension to match your hosted endpoint, for example `https://human-text.onrender.com`.

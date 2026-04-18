@@ -1,5 +1,6 @@
 let lastResult = "";
 let lastTone = null;
+const BACKEND_URL = "https://human-text.onrender.com";
 
 // Character counter
 const inputText = document.getElementById("inputText");
@@ -25,7 +26,7 @@ document.getElementById("humanizeBtn").addEventListener("click", async () => {
   hideResult();
 
   try {
-    const response = await fetch("http://localhost:3000/humanize", {
+    const response = await fetch(`${BACKEND_URL}/humanize`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text }),
@@ -42,9 +43,7 @@ document.getElementById("humanizeBtn").addEventListener("click", async () => {
     }
   } catch (err) {
     console.error("Error:", err);
-    showError(
-      "Cannot reach backend. Make sure server is running on port 3000.",
-    );
+    showError("Cannot reach backend. Make sure the Render service is running.");
   } finally {
     setLoading(false);
   }
