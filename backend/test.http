@@ -1,0 +1,23 @@
+### Test 1: Formal AI text
+POST http://localhost:3000/humanize
+Content-Type: application/json
+
+{
+  "text": "It is important to note that the utilization of this feature necessitates careful consideration of multiple contributing factors. Furthermore, it is worth emphasizing that the implementation strategy should be thoroughly evaluated prior to deployment."
+}
+
+### Test 2: Casual AI text
+POST http://localhost:3000/humanize
+Content-Type: application/json
+
+{
+  "text": "The system has been specifically designed in order to provide comprehensive solutions for users who require advanced functionality. In this context, it can be stated that the platform offers numerous advantages that are conducive to achieving optimal results."
+}
+
+### Test 3: Academic AI text
+POST http://localhost:3000/humanize
+Content-Type: application/json
+
+{
+  "text": "The efficacy of contemporary machine learning models has been extensively demonstrated in scholarly literature. Moreover, the proliferation of neural network architectures has precipitated paradigm shifts within the computational domain."
+}

@@ -1,0 +1,437 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500&family=Roboto:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+        background: #f6f8fc;
+        color: #202124;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        min-height: 0;
+      }
+
+      /* Top bar - Gmail style */
+      .topbar {
+        background: #f6f8fc;
+        padding: 16px 16px 8px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .topbar img {
+        width: 28px;
+        height: 28px;
+      }
+
+      .topbar-title {
+        font-family: "Google Sans", sans-serif;
+        font-size: 18px;
+        color: #202124;
+        font-weight: 400;
+      }
+
+      .topbar-title span {
+        color: #1a73e8;
+        font-weight: 500;
+      }
+
+      /* Main content */
+      .content {
+        flex: 1;
+        min-height: 0;
+        overflow-y: scroll;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .content::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      .content::-webkit-scrollbar-track {
+        background: #eceff3;
+        border-radius: 8px;
+      }
+
+      .content::-webkit-scrollbar-thumb {
+        background: #b9c1cf;
+        border-radius: 8px;
+      }
+
+      .content::-webkit-scrollbar-thumb:hover {
+        background: #9ea8b8;
+      }
+
+      /* Style selector - Gmail chip style */
+      .section-label {
+        font-size: 11px;
+        font-weight: 500;
+        color: #5f6368;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 6px;
+      }
+
+      .chips {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .chip {
+        padding: 6px 14px;
+        border-radius: 16px;
+        font-size: 13px;
+        font-family: "Google Sans", sans-serif;
+        border: 1px solid #dadce0;
+        background: white;
+        color: #3c4043;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+
+      .chip:hover {
+        background: #e8f0fe;
+        border-color: #1a73e8;
+        color: #1a73e8;
+      }
+
+      .chip.active {
+        background: #e8f0fe;
+        border-color: #1a73e8;
+        color: #1a73e8;
+        font-weight: 500;
+      }
+
+      /* Textarea - Gmail compose style */
+      .input-card {
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        overflow: hidden;
+        transition: box-shadow 0.2s;
+      }
+
+      .input-card:focus-within {
+        box-shadow:
+          0 1px 3px rgba(0, 0, 0, 0.2),
+          0 1px 2px rgba(0, 0, 0, 0.14);
+        border-color: transparent;
+      }
+
+      .input-card-label {
+        padding: 10px 14px 0;
+        font-size: 11px;
+        color: #5f6368;
+        font-weight: 500;
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 160px;
+        padding: 8px 14px 12px;
+        border: none;
+        outline: none;
+        font-family: "Roboto", sans-serif;
+        font-size: 14px;
+        color: #202124;
+        resize: vertical;
+        background: transparent;
+        line-height: 1.6;
+      }
+
+      textarea::placeholder {
+        color: #9aa0a6;
+      }
+
+      /* Char count */
+      .char-count {
+        padding: 4px 14px 8px;
+        font-size: 11px;
+        color: #9aa0a6;
+        text-align: right;
+      }
+
+      .char-count.warn {
+        color: #d93025;
+      }
+
+      /* Humanize button - Gmail blue button */
+      .btn-humanize {
+        background: #1a73e8;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 10px 20px;
+        font-family: "Google Sans", sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition:
+          background 0.2s,
+          box-shadow 0.2s;
+        align-self: flex-start;
+      }
+
+      .btn-humanize:hover {
+        background: #1765cc;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-humanize:disabled {
+        background: #dadce0;
+        color: #9aa0a6;
+        cursor: not-allowed;
+        box-shadow: none;
+      }
+
+      /* Spinner inside button */
+      .spinner {
+        width: 14px;
+        height: 14px;
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+        display: none;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Result card */
+      .result-card {
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        overflow: hidden;
+        display: none;
+        max-height: 52vh;
+      }
+
+      .result-card.is-visible {
+        display: flex;
+        flex-direction: column;
+        min-height: 180px;
+      }
+
+      .result-header {
+        padding: 10px 14px;
+        background: #e8f0fe;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .result-header-label {
+        font-family: "Google Sans", sans-serif;
+        font-size: 13px;
+        color: #1a73e8;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .result-text {
+        padding: 12px 14px;
+        font-size: 14px;
+        color: #202124;
+        line-height: 1.7;
+        white-space: pre-wrap;
+        overflow-y: auto;
+        min-height: 120px;
+        flex: 1;
+        min-height: 0;
+      }
+
+      .result-text::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      .result-text::-webkit-scrollbar-track {
+        background: #eceff3;
+        border-radius: 8px;
+      }
+
+      .result-text::-webkit-scrollbar-thumb {
+        background: #b9c1cf;
+        border-radius: 8px;
+      }
+
+      .result-text::-webkit-scrollbar-thumb:hover {
+        background: #9ea8b8;
+      }
+
+      .result-actions {
+        padding: 8px 14px 12px;
+        display: flex;
+        gap: 8px;
+        border-top: 1px solid #f1f3f4;
+        background: white;
+        position: sticky;
+        bottom: 0;
+        z-index: 1;
+      }
+
+      .btn-secondary {
+        padding: 7px 16px;
+        border-radius: 4px;
+        border: 1px solid #dadce0;
+        background: white;
+        color: #3c4043;
+        font-family: "Google Sans", sans-serif;
+        font-size: 13px;
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+
+      .btn-secondary:hover {
+        background: #f1f3f4;
+      }
+
+      .btn-primary-sm {
+        padding: 7px 16px;
+        border-radius: 4px;
+        border: none;
+        background: #1a73e8;
+        color: white;
+        font-family: "Google Sans", sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+
+      .btn-primary-sm:hover {
+        background: #1765cc;
+      }
+
+      /* Error banner - Gmail style */
+      .error-banner {
+        background: #fce8e6;
+        border-radius: 4px;
+        padding: 10px 14px;
+        font-size: 13px;
+        color: #c5221f;
+        display: none;
+        align-items: center;
+        gap: 8px;
+      }
+
+      /* Divider with label */
+      .divider {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #9aa0a6;
+        font-size: 11px;
+      }
+
+      .divider::before,
+      .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #e0e0e0;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top bar -->
+    <div class="topbar">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <circle cx="14" cy="14" r="14" fill="#e8f0fe" />
+        <text x="14" y="19" text-anchor="middle" font-size="14" fill="#1a73e8">
+          ✦
+        </text>
+      </svg>
+      <div class="topbar-title">Humanize <span>Text</span></div>
+    </div>
+
+    <!-- Main content -->
+    <div class="content">
+      <!-- Input -->
+      <div class="input-card">
+        <div class="input-card-label">Paste your text</div>
+        <textarea
+          id="inputText"
+          placeholder="Paste AI-generated text here…"
+          maxlength="5000"
+        ></textarea>
+        <div class="char-count" id="charCount">0 / 5000</div>
+      </div>
+
+      <!-- Humanize button -->
+      <button class="btn-humanize" id="humanizeBtn">
+        <div class="spinner" id="spinner"></div>
+        <span id="btnLabel">Humanize</span>
+      </button>
+
+      <!-- Error -->
+      <div class="error-banner" id="errorBanner">
+        ⚠
+        <span id="errorText"
+          >Something went wrong. Make sure the backend is running.</span
+        >
+      </div>
+
+      <!-- Divider (shown after result) -->
+      <div class="divider" id="divider" style="display: none">Result</div>
+
+      <!-- Result card -->
+      <div class="result-card" id="resultCard">
+        <div class="result-header">
+          <div class="result-header-label">✦ Humanized version</div>
+        </div>
+        <div
+          class="tone-info"
+          id="toneInfo"
+          style="
+            display: none;
+            padding: 8px 14px;
+            background: #f1f3f4;
+            font-size: 12px;
+            color: #5f6368;
+            border-bottom: 1px solid #e0e0e0;
+          "
+        >
+          <strong>Detected:</strong> <span id="toneLabel"></span> (<span
+            id="toneConfidence"
+          ></span
+          >% confidence)
+        </div>
+        <div class="result-text" id="resultText"></div>
+        <div class="result-actions">
+          <button class="btn-secondary" id="copyBtn">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="sidepanel.js"></script>
+  </body>
+</html>

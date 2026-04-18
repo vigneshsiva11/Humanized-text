@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Humanize Text",
+  "version": "1.0",
+  "description": "Convert AI-generated text to natural human writing",
+  "permissions": [
+    "contextMenus",
+    "activeTab",
+    "storage",
+    "scripting",
+    "sidePanel"
+  ],
+  "host_permissions": ["http://localhost:3000/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "action": {
+    "default_title": "Humanize Text"
+  }
+}
